@@ -48,26 +48,29 @@ var randomQuote = quotes[randomNum];//Stores Random Number
 //Gets Random Quote and Prints it
 function printQuote() {
   var randomQ = getRandomQuote();
-    var comQuote = document.getElementById('quote-box');
+    var comQuote = '<p class="quote">' + randomQ.quote + '</p>' + '<p class="source">' + randomQ.source + '<span class=" tags">' + randomQ.tags + '</span>';
 
-    //If no citation or year defined create this innerHTML
-    if (typeof randomQ.citation === "undefined" && typeof randomQ.year === "undefined") {
-            comQuote.innerHTML = '<p class="quote">' + randomQ.quote + '</p>' + '<p class="source">' + randomQ.source + '<span class=" tags">' + randomQ.tags + '</span>';
+    //Adds the year and also citation to quote once available
+    if (typeof randomQ.citation !== "undefined" && typeof randomQ.year !== "undefined"){
+        comQuote += '<span class="citation">' + randomQ.citation + '</span>';
+        comQuote += '<span class="year">' + randomQ.year + '</span></p>';
 
-    //If no year defined create this innerHTML
-        } else if (typeof randomQ.year !== "undefined" && typeof randomQ.citation === "undefined"){
-        comQuote.innerHTML = '<p class="quote">' + randomQ.quote + '</p>' + '<p class="source">' + randomQ.source + '<span class=" tags">' + randomQ.tags + '</span>' + '<span class="year">' + randomQ.year + '</span></p>';
+      //Add only year to quote once available and no citation provided   
+    } else if (typeof randomQ.year !== "undefined" && typeof randomQ.citation === "undefined"){
+    comQuote += '<span class="year">' + randomQ.year + '</span></p>';
+        parent.removeChild('<span class="citation"><span>');
 
-    //If no citation defined create this innerHTML
-      } else if (typeof randomQ.citation !== "undefined" && typeof randomQ.year === "undefined") {
-        comQuote.innerHTML = '<p class="quote">' + randomQ.quote + '</p>' + '<p class="source">' + randomQ.source + '<span class=" tags">' + randomQ.tags + '</span>' + '<span class="citation">' + randomQ.citation + '</span>';
+        //Adds only citation to quote once available and no year provided
+    } else if (typeof randomQ.citation !== "undefined" && typeof randomQ.year === "undefined") {
+    comQuote += '<span class="citation">' + randomQ.citation + '</span>';
+       parent.removeChild('<span class="year"><span>');
 
-    //Prints all the properties is none undefined
-  } else {
-    comQuote.innerHTML = '<p class="quote">' + randomQ.quote + '</p>' + '<p class="source">' + randomQ.source + '<span class=" tags">' + randomQ.tags + '</span>' + '<span class="citation">' + randomQ.citation + '</span>' + '<span class="year">' + randomQ.year + '</span></p>';
-  }
-  getRandomColor (); //Calls random background color function
+    }
+    document.getElementById('quote-box').innerHTML = comQuote; //Prints the created HTML from the different conditions
+    getRandomColor (); //Calls random background color function
 }
+
+
 // the quotes page will refresh every 10 seconds
 setInterval(printQuote, 10000);
 
